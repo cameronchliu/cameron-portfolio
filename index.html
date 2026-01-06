@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>你的名字｜Frontend Portfolio</title>
+  <meta name="description" content="前端工程師作品集：Vue / UI / 切版 / API 串接" />
+  <style>
+    :root{
+      --bg: #0b0f19;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --line: rgba(255,255,255,.12);
+      --accent: #7c5cff; /* 你可以改成喜歡的主色 */
+      --accent2:#22c55e;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --radius: 18px;
+      --max: 1080px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(124,92,255,.35), transparent 55%),
+                  radial-gradient(900px 600px at 95% 10%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding: 0 20px;}
+
+    /* Top nav */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(12px);
+      background: rgba(11,15,25,.55);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+      gap: 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 750;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), rgba(255,255,255,.25));
+      box-shadow: var(--shadow);
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:8px;
+      border-radius: 10px;
+      border:1px solid rgba(255,255,255,.25);
+    }
+    .nav-links{
+      display:flex; gap: 14px; align-items:center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .nav-links a{
+      padding:10px 10px; border-radius: 12px;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .nav-links a:hover{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight: 700;
+      gap: 8px;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn.primary{
+      border-color: rgba(124,92,255,.45);
+      background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(255,255,255,.06));
+    }
+    .btn.primary:hover{
+      border-color: rgba(124,92,255,.75);
+    }
+
+    /* Hero */
+    .hero{
+      padding: 56px 0 26px;
+    }
+    .grid-hero{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+    .card{
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-main{
+      padding: 26px;
+      position:relative;
+      overflow:hidden;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-weight:700;
+      font-size: 13px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;background: var(--accent2);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.1;
+      letter-spacing:-.5px;
+    }
+    .lead{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.7;
+      max-width: 60ch;
+    }
+    .hero-actions{
+      margin-top: 18px;
+      display:flex; gap: 10px; flex-wrap:wrap;
+    }
+
+    .hero-side{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mini{
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+    }
+    .mini h3{
+      margin:0 0 8px; font-size: 14px; letter-spacing:.2px;
+    }
+    .mini p{
+      margin:0; color: var(--muted); line-height:1.6; font-size: 14px;
+    }
+    .tagrow{display:flex; flex-wrap:wrap; gap:8px; margin-top: 10px;}
+    .tag{
+      font-size: 12.5px;
+      color: rgba(255,255,255,.80);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    /* Section */
+    section{padding: 22px 0;}
+    .sec-head{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .sec-head h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .sec-head p{margin:0; color: var(--muted); font-size: 14px;}
+
+    /* Projects */
+    .projects{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .p-card{
+      padding: 14px;
+      position:relative;
+      overflow:hidden;
+      transition: transform .22s ease, background .22s ease, border-color .22s ease;
+    }
+    .p-card:hover{
+      transform: translateY(-4px);
+      background: var(--card2);
+      border-color: rgba(255,255,255,.20);
+    }
+    .thumb{
+      height: 150px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(135deg, rgba(124,92,255,.25), rgba(34,197,94,.10)),
+        radial-gradient(800px 240px at 10% 0%, rgba(255,255,255,.10), transparent 60%);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(255,255,255,.65);
+      font-weight: 800;
+      letter-spacing:.8px;
+    }
+    .p-title{
+      margin: 12px 0 6px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .p-desc{
+      margin:0;
+      color: var(--muted);
+      font-size: 13.8px;
+      line-height: 1.6;
+      min-height: 44px;
+    }
+    .p-meta{
+      margin-top: 10px;
+      display:flex; gap: 8px; flex-wrap:wrap;
+    }
+
+    /* Skills */
+    .skills{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+    }
+    .skill-list{
+      display:flex; flex-wrap:wrap; gap:10px;
+      padding: 16px;
+    }
+    .skill{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.86);
+      font-weight: 700;
+      font-size: 13.5px;
+    }
+    .timeline{
+      padding: 16px;
+    }
+    .tl{
+      display:grid; gap: 10px;
+    }
+    .tl-item{
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+    .tl-item b{display:block; margin-bottom:4px;}
+    .tl-item span{color:var(--muted); font-size: 13.5px; line-height:1.6;}
+
+    /* Contact */
+    .contact{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .contact .card{padding: 18px;}
+    .row{
+      display:flex; gap: 10px; align-items:center; flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .hint{color: var(--muted); font-size: 13.5px; line-height:1.7; margin: 6px 0 0;}
+    .copy{
+      font-size: 12.5px;
+      color: rgba(255,255,255,.55);
+      padding: 24px 0 40px;
+      text-align:center;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .grid-hero{grid-template-columns: 1fr;}
+      .projects{grid-template-columns: repeat(2, 1fr);}
+      .skills{grid-template-columns: 1fr;}
+      .contact{grid-template-columns: 1fr;}
+    }
+    @media (max-width: 560px){
+      .nav-links{display:none;}
+      .projects{grid-template-columns: 1fr;}
+      .thumb{height: 140px;}
+    }
+
+    /* Smooth section anchor offset for sticky nav */
+    :target{scroll-margin-top: 84px;}
+  </style>
+</head>
+
+<body>
+  <!-- Nav -->
+  <header class="nav">
+    <div class="wrap">
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>你的名字<span style="color:var(--muted); font-weight:700;"> / Frontend</span></div>
+        </div>
+
+        <nav class="nav-links" aria-label="主選單">
+          <a href="#projects">作品</a>
+          <a href="#skills">技能</a>
+          <a href="#about">關於我</a>
+          <a href="#contact">聯絡</a>
+        </nav>
+
+        <a class="btn primary" href="#projects" title="看作品">
+          🚀 立即看作品
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="wrap">
+    <section class="hero" id="top">
+      <div class="grid-hero">
+        <div class="card hero-main">
+          <div class="pill"><span class="dot"></span> 目前求職中 / 前端工程師</div>
+          <h1>我做的是「看起來舒服、用起來順」的網頁 ✨</h1>
+          <p class="lead">
+            我擅長把設計稿落地成有質感的 UI，並用 Vue / JavaScript 做互動與 API 串接。
+            喜歡把複雜的需求拆小，讓功能穩穩上線（不搞玄學，搞交付 😎）
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#projects">📌 精選作品</a>
+            <a class="btn" href="#contact">✉️ 聯絡我</a>
+            <a class="btn" href="https://github.com/" target="_blank" rel="noreferrer">🧩 GitHub</a>
+            <a class="btn" href="#" id="downloadResume">📄 下載履歷</a>
+          </div>
+
+          <p class="hint">小提醒：把 GitHub / 履歷連結換成你的就好～</p>
+        </div>
+
+        <aside class="card hero-side" aria-label="側邊資訊">
+          <div class="mini">
+            <h3>🧠 我正在做的事</h3>
+            <p>前端求職準備 + 作品集整理 + UI/UX 進修中。</p>
+            <div class="tagrow">
+              <span class="tag">Vue 3</span>
+              <span class="tag">Vite</span>
+              <span class="tag">RWD</span>
+              <span class="tag">API</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>🎯 我喜歡的風格</h3>
+            <p>乾淨、留白、重視資訊層級，互動要有小爽感。</p>
+            <div class="tagrow">
+              <span class="tag">Clean UI</span>
+              <span class="tag">Micro-interaction</span>
+              <span class="tag">Accessibility</span>
+            </div>
+          </div>
+
+          <div class="mini">
+            <h3>⚡ 目前狀態</h3>
+            <p>可面試 / 可試作 / 可遠端協作。</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+      <div class="sec-head">
+        <div>
+          <h2>📌 精選作品</h2>
+          <p>3 個就好，不要塞爆（但每個都要能講故事）</p>
+        </div>
+        <a class="btn" href="#contact">想看更多？找我</a>
+      </div>
+
+      <div class="projects">
+        <article class="card p-card">
+          <div class="thumb">PROJECT 01</div>
+          <div class="p-title">台中中央公園改版（RWD 網站）</div>
+          <p class="p-desc">重新整理資訊架構，設計更直覺的導覽與卡片式內容呈現，支援手機版。</p>
+          <div class="p-meta">
+            <span class="tag">HTML/CSS</span><span class="tag">RWD</span><span class="tag">UI</span>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🔗 Demo</a>
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🧾 GitHub</a>
+          </div>
+        </article>
+
+        <article class="card p-card">
+          <div class="thumb">PROJECT 02</div>
+          <div class="p-title">Vue 小專案：任務清單（爽感版）</div>
+          <p class="p-desc">支援新增 / 完成 / 篩選，含小動畫與 localStorage 儲存，完成任務有「嗯～舒服」感。</p>
+          <div class="p-meta">
+            <span class="tag">Vue 3</span><span class="tag">localStorage</span><span class="tag">Animation</span>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🔗 Demo</a>
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🧾 GitHub</a>
+          </div>
+        </article>
+
+        <article class="card p-card">
+          <div class="thumb">PROJECT 03</div>
+          <div class="p-title">API 串接：資料卡片列表</div>
+          <p class="p-desc">使用 fetch/axios 取得資料，做搜尋 / 分頁 / loading 狀態，並整理成一致的 UI 卡片。</p>
+          <div class="p-meta">
+            <span class="tag">JavaScript</span><span class="tag">API</span><span class="tag">State</span>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🔗 Demo</a>
+            <a class="btn" href="#" target="_blank" rel="noreferrer">🧾 GitHub</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="hint">✅ 小技巧：每個作品寫「你做了什麼、解決了什麼、技術點是什麼」就贏一半。</p>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+      <div class="sec-head">
+        <div>
+          <h2>🧰 技能</h2>
+          <p>把你現在會的先放上去就好，之後再慢慢補強。</p>
+        </div>
+      </div>
+
+      <div class="skills">
+        <div class="card skill-list">
+          <span class="skill">HTML / CSS</span>
+          <span class="skill">RWD / Flex / Grid</span>
+          <span class="skill">JavaScript (ES6+)</span>
+          <span class="skill">Vue 3 / Vite</span>
+          <span class="skill">Bootstrap / Tailwind</span>
+          <span class="skill">Git / GitHub</span>
+          <span class="skill">REST API / Fetch</span>
+          <span class="skill">Figma 基礎</span>
+        </div>
+
+        <div class="card timeline" id="about">
+          <div class="sec-head" style="margin:0 0 10px;">
+            <h2 style="font-size:18px;margin:0;">👤 關於我</h2>
+          </div>
+          <div class="tl">
+            <div class="tl-item">
+              <b>我在意的事</b>
+              <span>把畫面做得舒服、把互動做得順、把需求拆成能落地的步驟。</span>
+            </div>
+            <div class="tl-item">
+              <b>我可以帶來什麼</b>
+              <span>切版細節、元件化、基本狀態管理、與後端協作 API 串接。</span>
+            </div>
+            <div class="tl-item">
+              <b>目前目標</b>
+              <span>找到能穩定成長的前端職缺，持續累積作品與協作經驗。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="sec-head">
+        <div>
+          <h2>📮 聯絡我</h2>
+          <p>你丟需求，我丟解法（合法的那種）</p>
+        </div>
+      </div>
+
+      <div class="contact">
+        <div class="card">
+          <b style="font-size:15px;">聯絡方式</b>
+          <p class="hint">把下面的 Email / 連結換成你的就可以了。</p>
+
+          <div class="row">
+            <a class="btn" href="mailto:yourname@email.com">✉️ yourname@email.com</a>
+            <a class="btn" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">💼 LinkedIn</a>
+            <a class="btn" href="https://github.com/" target="_blank" rel="noreferrer">🧩 GitHub</a>
+          </div>
+
+          <p class="hint">如果你想更「求職友善」：加上所在地（台中/可遠端）跟可面試時間。</p>
+        </div>
+
+        <div class="card">
+          <b style="font-size:15px;">一句話自我介紹（可直接抄）</b>
+          <p class="hint" id="oneLiner">
+            我是前端學習者，擅長把設計稿切成乾淨的 RWD 版面，並用 Vue / JavaScript 完成互動與 API 串接。
+          </p>
+          <div class="row">
+            <button class="btn" id="copyLine">📋 複製這句</button>
+            <a class="btn primary" href="#top">⬆️ 回到上面</a>
+          </div>
+          <p class="hint">（小心：HR 看到「有一句話」會覺得你很會整理重點 👍）</p>
+        </div>
+      </div>
+
+      <div class="copy">© <span id="year"></span> 你的名字｜Made with coffee ☕</div>
+    </section>
+  </main>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Copy one-liner
+    document.getElementById('copyLine').addEventListener('click', async () => {
+      const text = document.getElementById('oneLiner').innerText.trim();
+      try{
+        await navigator.clipboard.writeText(text);
+        alert('已複製 ✅ 直接貼到履歷/自介都行');
+      }catch(e){
+        alert('你的瀏覽器不給我剪貼簿權限 🥲 你手動複製一下');
+      }
+    });
+
+    // Fake resume download (replace with your PDF url)
+    document.getElementById('downloadResume').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('把這個按鈕的連結換成你的履歷 PDF 就能下載囉 📄');
+    });
+  </script>
+</body>
+</html>
